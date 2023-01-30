@@ -1,16 +1,17 @@
 import express from "express";
 import { router } from './src/router/router';
 import bodyParser from "body-parser";
+import fileUpload from 'express-fileupload';
 import session from "express-session";
 import flash from "connect-flash";
 import { AppDataSource } from "./src/data-source";
-import cors from "cors";
 
 const app = express();
 
 AppDataSource.initialize().then(() => {console.log('database connected');
 });
-app.use(cors());
+app.set('views', './src/views');
+app.set('view engine', 'ejs');
 app.use(express.static('./public'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
