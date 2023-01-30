@@ -6,7 +6,7 @@ const data_source_1 = require("../data-source");
 class ProductService {
     constructor() {
         this.getAll = async () => {
-            let sql = `SELECT * FROM product`;
+            let sql = `SELECT * FROM product JOIN category ON product.category = category.idCategory`;
             let products = await this.productRepository.query(sql);
             return products;
         };

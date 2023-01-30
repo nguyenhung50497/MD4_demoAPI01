@@ -13,7 +13,10 @@ class HomeController {
     getAll = async (req: Request, res: Response) => {
         try {
             let products = await productService.getAll();
-            res.status(200).json(products);
+            let categories = await categoryService.getAll();
+            let data = [ products, categories];
+            console.log(data);
+            res.status(200).json(data);
         } catch (err) {
             res.status(500).json(err.message);
         }
