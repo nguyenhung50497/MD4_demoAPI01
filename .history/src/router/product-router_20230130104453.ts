@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import homeController from "../controller/HomeController";
+
+export const productRouter = Router();
+productRouter.get('', homeController.getAll);
+// productRouter.get('/createProduct', homeController.showFormCreate);
+productRouter.post('', homeController.createProduct);
+// productRouter.get('/update/:id', homeController.showFormEdit);
+productRouter.put('/:id', homeController.updateProduct);
+// productRouter.get('/delete/:id', homeController.showFormDelete);
+productRouter.delete('/:id', homeController.deleteProduct);
+// productRouter.get('/detailp/:id', homeController.showFormDetail);
+productRouter.get('/find-by-name?name=A', homeController.search);
