@@ -55,8 +55,10 @@ class HomeController {
     
     search = async (req: Request, res: Response) => {
         try {
-            let products = await productService.search(req.params.name);
-            res.status(200).json(products);
+            let products = await productService.search(req.query.name);
+            let categories = await categoryService.getAll();
+            let data = [ products, categories];
+            res.status(200).json(data);
         } catch (err) {
             res.status(500).json(err.message);
         }

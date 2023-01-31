@@ -11,5 +11,5 @@ exports.productRouter.get('', HomeController_1.default.getAll);
 exports.productRouter.post('', HomeController_1.default.createProduct);
 exports.productRouter.put('/:id', HomeController_1.default.updateProduct);
 exports.productRouter.delete('/:id', HomeController_1.default.deleteProduct);
-exports.productRouter.get('/find-by-name?name=:name', HomeController_1.default.search);
+exports.productRouter.get('/find-by-name', HomeController_1.default.search);
 //# sourceMappingURL=product-router.js.map

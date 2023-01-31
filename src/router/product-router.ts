@@ -10,4 +10,4 @@ productRouter.put('/:id', homeController.updateProduct);
 // productRouter.get('/delete/:id', homeController.showFormDelete);
 productRouter.delete('/:id', homeController.deleteProduct);
 // productRouter.get('/detailp/:id', homeController.showFormDetail);
-productRouter.get('/find-by-name?name=:name', homeController.search);
+productRouter.get('/find-by-name', homeController.search);
