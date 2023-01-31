@@ -12,7 +12,6 @@ class HomeController {
                 let products = await ProductService_1.default.getAll();
                 let categories = await CategoryService_1.default.getAll();
                 let data = [products, categories];
-                console.log(data);
                 res.status(200).json(data);
             }
             catch (err) {
