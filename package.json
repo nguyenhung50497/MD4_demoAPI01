@@ -38,6 +38,8 @@
 
     "@types/express-session": "^1.17.5",
 
+    "@types/jsonwebtoken": "^9.0.1",
+
     "@types/mongoose": "^5.11.97",
 
     "express-session": "^1.17.3",
@@ -77,6 +79,8 @@
     "express-fileupload": "^1.4.0",
 
     "flash": "^1.1.0",
+
+    "jsonwebtoken": "^9.0.0",
 
     "mongoose": "^6.8.3",
 

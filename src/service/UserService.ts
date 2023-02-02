@@ -2,6 +2,9 @@ import { User } from "../model/user";
 import { Cart } from "../model/cart";
 import { Product } from "../model/product";
 import { AppDataSource } from "../data-source";
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+// import SECRET from '../middleware/auth';
 
 class UserService {
     private userRepository;
@@ -16,24 +19,49 @@ class UserService {
         return users;
     }
 
-    checkUser = async (user) => {
-        let userCheck = await this.userRepository.findOneBy({ username: user.username, password: user.password });
+    checkUserName = async (user) => {
+        let userCheck = await this.userRepository.findOneBy({ username: user.username});
         if (!userCheck) {
             return null;
         }
         return userCheck;
     }
 
-    checkUsername = async (user) => {
-        let usernameCheck = await this.userRepository.findOneBy({ username: user.username});
-        if (!usernameCheck) {
-            return null;
+    checkUser = async (user) => {
+        let userCheck = await this.userRepository.findOneBy({ username: user.username});
+        if (!userCheck) {
+            return 'User not found';
         }
-        return usernameCheck;
+        let comparePassword = await bcrypt.compare(user.password, userCheck.password);
+        if (!comparePassword) {
+            return 'Password is wrong';
+        } else {
+            let payload = {
+                username: userCheck.username,
+                id: userCheck.idUser,
+                role: userCheck.role
+            }
+            const SECRET = '123456';
+            const token = jwt.sign(payload, SECRET, {
+                expiresIn: 3600000
+            });
+            const check = {
+                token: token,
+                username: userCheck.username,
+                id: userCheck.idUser,
+                role: userCheck.role
+            }
+            return check;
+        }
     }
 
     registerUser = async (user) => {
-        return await this.userRepository.save(user);
+        let userCheck = await this.userRepository.findOneBy({ username: user.username});
+        if (!userCheck) {
+            user.password = await bcrypt.hash(user.password, 10);
+            return await this.userRepository.save(user);
+        }
+        return 'Username already registered';
     }
 
     findById = async (id) => {

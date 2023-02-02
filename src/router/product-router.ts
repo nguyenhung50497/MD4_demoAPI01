@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import homeController from "../controller/HomeController";
+import { auth } from '../middleware/auth';
+import { role } from '../middleware/role';
 
 export const productRouter = Router();
+productRouter.use(auth);
 productRouter.get('', homeController.getAll);
-// productRouter.get('/createProduct', homeController.showFormCreate);
-productRouter.post('', homeController.createProduct);
-// productRouter.get('/update/:id', homeController.showFormEdit);
-productRouter.put('/:id', homeController.updateProduct);
-// productRouter.get('/delete/:id', homeController.showFormDelete);
-productRouter.delete('/:id', homeController.deleteProduct);
-// productRouter.get('/detailp/:id', homeController.showFormDetail);
+productRouter.post('', role, homeController.createProduct);
+productRouter.put('/:id', role, homeController.updateProduct);
+productRouter.delete('/:id', role, homeController.deleteProduct);
 productRouter.get('/find-by-name', homeController.search);

@@ -1,30 +1,61 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = require("../model/user");
 const cart_1 = require("../model/cart");
 const data_source_1 = require("../data-source");
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class UserService {
     constructor() {
         this.getAll = async () => {
             let users = await this.userRepository.find();
             return users;
         };
-        this.checkUser = async (user) => {
-            let userCheck = await this.userRepository.findOneBy({ username: user.username, password: user.password });
+        this.checkUserName = async (user) => {
+            let userCheck = await this.userRepository.findOneBy({ username: user.username });
             if (!userCheck) {
                 return null;
             }
             return userCheck;
         };
-        this.checkUsername = async (user) => {
-            let usernameCheck = await this.userRepository.findOneBy({ username: user.username });
-            if (!usernameCheck) {
-                return null;
+        this.checkUser = async (user) => {
+            let userCheck = await this.userRepository.findOneBy({ username: user.username });
+            if (!userCheck) {
+                return 'User not found';
             }
-            return usernameCheck;
+            let comparePassword = await bcrypt_1.default.compare(user.password, userCheck.password);
+            if (!comparePassword) {
+                return 'Password is wrong';
+            }
+            else {
+                let payload = {
+                    username: userCheck.username,
+                    id: userCheck.idUser,
+                    role: userCheck.role
+                };
+                const SECRET = '123456';
+                const token = jsonwebtoken_1.default.sign(payload, SECRET, {
+                    expiresIn: 3600000
+                });
+                const check = {
+                    token: token,
+                    username: userCheck.username,
+                    id: userCheck.idUser,
+                    role: userCheck.role
+                };
+                return check;
+            }
         };
         this.registerUser = async (user) => {
-            return await this.userRepository.save(user);
+            let userCheck = await this.userRepository.findOneBy({ username: user.username });
+            if (!userCheck) {
+                user.password = await bcrypt_1.default.hash(user.password, 10);
+                return await this.userRepository.save(user);
+            }
+            return 'Username already registered';
         };
         this.findById = async (id) => {
             let user = await this.userRepository.findOneBy({ idUser: id });

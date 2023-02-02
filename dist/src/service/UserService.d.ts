@@ -3,8 +3,13 @@ declare class UserService {
     private cartRepository;
     constructor();
     getAll: () => Promise<any>;
-    checkUser: (user: any) => Promise<any>;
-    checkUsername: (user: any) => Promise<any>;
+    checkUserName: (user: any) => Promise<any>;
+    checkUser: (user: any) => Promise<"User not found" | "Password is wrong" | {
+        token: string;
+        username: any;
+        id: any;
+        role: any;
+    }>;
     registerUser: (user: any) => Promise<any>;
     findById: (id: any) => Promise<any>;
     private changePassword;
